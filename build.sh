@@ -2,7 +2,7 @@
 
 set -x -u -e
 
-OCAML=/mnt/local/sda1/mshinwell/mshinwell-ocaml-install
+OCAML=`opam config var prefix`
 INCLUDE=$OCAML/lib/ocaml
 
 gcc -fPIC -g -c -I$INCLUDE shared_lib_c.c
