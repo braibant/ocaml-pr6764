@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 
   argv_global = argv;
 
-  lib = dlopen("shared_lib.so", RTLD_NOW);
+  lib = dlopen("shared_lib.so", RTLD_NOW | RTLD_LOCAL);
   if (!lib) {
     printf("%s\n", dlerror());
     fflush(stdout);
