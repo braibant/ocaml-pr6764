@@ -38,23 +38,28 @@ static void* thread_body(void* lib)
 int main(int argc, char* argv[])
 {
   void* lib;
+  int count;
 
   argv_global = argv;
 
-  lib = dlopen("shared_lib.so", RTLD_NOW | RTLD_LOCAL);
-  if (!lib) {
-    printf("%s\n", dlerror());
+  while(1) {
+
+    lib = dlopen("shared_lib.so", RTLD_NOW | RTLD_LOCAL);
+    if (!lib) {
+      printf("%s\n", dlerror());
+      fflush(stdout);
+      abort();
+    }
+
+    printf("starting thread creation loop\n");
     fflush(stdout);
-    abort();
+    for (count =0; count < 10; count ++) {
+      pthread_t handle;
+      pthread_create(&handle, NULL, &thread_body, lib);
+      usleep(10000); /* 10ms */
+    }
+    printf("finishing thread creation loop\n");
+    dlclose(lib);
   }
-
-  printf("starting thread creation loop\n");
-  fflush(stdout);
-  while (1) {
-    pthread_t handle;
-    pthread_create(&handle, NULL, &thread_body, lib);
-    usleep(100000); /* 100ms */
-  }
-
   return 0;
 }

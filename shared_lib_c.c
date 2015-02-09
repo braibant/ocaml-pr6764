@@ -13,11 +13,6 @@ value call_ocaml_in_shared_lib(char** argv)
   pid_t tid = syscall(SYS_gettid);
 
   printf ("call_ocaml_in_shared_lib %d\n", tid);
-  /* if (!initialized_runtime) { */
-  /*   caml_startup(argv); */
-  /*   caml_thread_initialize(); /\* removing this exhibits the segfault in PR#6764 *\/ */
-  /*   initialized_runtime = 1; */
-  /* } */
   int reg = caml_c_thread_register();
   caml_acquire_runtime_system();
   r = caml_callback(*caml_named_value("ocaml_in_shared_lib"), Val_int(42));
