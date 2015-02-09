@@ -35,10 +35,12 @@ static void* thread_body(void* lib)
   return NULL;
 }
 
+#define COUNT 10
 int main(int argc, char* argv[])
 {
   void* lib;
   int count;
+  pthread_t handles [COUNT];
 
   argv_global = argv;
 
@@ -53,13 +55,22 @@ int main(int argc, char* argv[])
 
     printf("starting thread creation loop\n");
     fflush(stdout);
-    for (count =0; count < 10; count ++) {
+
+    for (count =0; count < COUNT; count ++) {
       pthread_t handle;
-      pthread_create(&handle, NULL, &thread_body, lib);
+      pthread_create(&handles[count], NULL, &thread_body, lib);
       usleep(10000); /* 10ms */
     }
     printf("finishing thread creation loop\n");
+
+    for (count =0; count < COUNT; count ++) {
+      pthread_join(handles[count],NULL);
+    };
+    printf("all thread joined\n");
+
     dlclose(lib);
+    printf("dlclose ok\n");
+    fflush(stdout);
   }
   return 0;
 }
