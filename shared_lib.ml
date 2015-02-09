@@ -5,3 +5,5 @@ let ocaml_in_shared_lib x =
 
 let () =
   Callback.register "ocaml_in_shared_lib" ocaml_in_shared_lib
+
+let _ = at_exit ( fun () -> Printf.printf "at exit\n%!")
