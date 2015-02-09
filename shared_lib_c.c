@@ -33,8 +33,16 @@ static void finalize_ocaml_runtime(){
   printf ("finalize_ocaml_runtime...\n");
   fflush(stdout);
 
-  value * at_exit = caml_named_value("Pervasives.do_at_exit");
-  if (at_exit != NULL) caml_callback_exn(*at_exit, Val_unit);
+  /* Option 0: do nothing. Yield an ocaml thread related segfault. */
+
+  /* Option 1: call at exit. segfault in libgcc. */
+  /* value * at_exit = caml_named_value("Pervasives.do_at_exit"); */
+  /* if (at_exit != NULL) caml_callback_exn(*at_exit, Val_unit); */
+
+  /* Option 2: call at exit, with the runtime lock. same as before. */
+  /* caml_acquire_runtime_system(); */
+  /* value * at_exit = caml_named_value("Pervasives.do_at_exit"); */
+  /* if (at_exit != NULL) caml_callback_exn(*at_exit, Val_unit); */
 }
 
 __attribute__((constructor))
