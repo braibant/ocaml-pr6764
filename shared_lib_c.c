@@ -13,11 +13,11 @@ value call_ocaml_in_shared_lib(char** argv)
   pid_t tid = syscall(SYS_gettid);
 
   /* printf ("call_ocaml_in_shared_lib %d\n", tid); */
-  int reg = caml_c_thread_register();
+  /* int reg = caml_c_thread_register(); */
   caml_acquire_runtime_system();
   r = caml_callback(*caml_named_value("ocaml_in_shared_lib"), Val_int(42));
   caml_release_runtime_system();
-  caml_c_thread_unregister();
+  /* caml_c_thread_unregister(); */
   return r;
 }
 
@@ -46,12 +46,17 @@ static void finalize_ocaml_runtime(){
   /* if (at_exit != NULL) caml_callback_exn(*at_exit, Val_unit); */
 
   /* Option 2: call at exit, with the runtime lock. same as before. */
-  caml_acquire_runtime_system();
+  /* caml_acquire_runtime_system(); */
   value * at_exit = caml_named_value("Pervasives.do_at_exit");
   if (at_exit != NULL) caml_callback_exn(*at_exit, Val_unit);
 
   printf ("finalize_ocaml_runtime: done\n");
   fflush(stdout);
+
+
+  /* value res = caml_thread_cleanup(Val_unit); */
+  /* printf ("kill tick: done\n"); */
+  /* fflush(stdout); */
 
   /* Option 3: call at exit, with the runtime lock. same as before. */
   /* caml_c_thread_register(); */

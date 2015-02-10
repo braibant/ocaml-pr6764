@@ -35,7 +35,7 @@ static void* thread_body(void* lib)
   return NULL;
 }
 
-#define COUNT 10
+#define COUNT 1
 int main(int argc, char* argv[])
 {
   void* lib;
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 
   while(1) {
 
-    lib = dlopen("shared_lib.so", RTLD_NOW | RTLD_LOCAL);
+    lib = dlopen("shared_lib.so", RTLD_NOW );
     if (!lib) {
       printf("%s\n", dlerror());
       fflush(stdout);
@@ -69,8 +69,10 @@ int main(int argc, char* argv[])
     printf("all thread joined\n");
 
     dlclose(lib);
+    fflush(stdout);
     printf("dlclose ok\n");
     fflush(stdout);
+    /* usleep(10000); */
   }
   return 0;
 }
